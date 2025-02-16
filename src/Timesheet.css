@@ -1,0 +1,122 @@
+.container {
+    max-width: 1200px;
+    margin: 10px 10px;
+    padding: 20px;
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.search-bar,
+.pay-type-filter {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-bar {
+    width: 74%;
+}
+
+.pay-type-filter {
+    width: 25%;
+    background: white;
+}
+
+.table-wrapper {
+    position: relative;
+    overflow-x: auto;
+    z-index: 1000;
+    white-space: nowrap;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    direction: ltr;
+
+}
+
+.timesheet-table {
+    width: 100%;
+    min-width: 1600px;
+    border-collapse: collapse;
+    direction: ltr;
+}
+
+.timesheet-table th,
+.timesheet-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.timesheet-table thead {
+    background-color: #A7C7E7;
+    color: #3D405B;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.timesheet-table input,
+.timesheet-table select {
+    width: 100%;
+    padding: 5px, 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.pagination button {
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #A7C7E7;
+    border: none;
+    border-radius: 5px;
+    color: #3D405B;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #A7C7E7;
+}
+
+.pagination button:disabled {
+    background-color: #E5E5E5;
+    cursor: not-allowed;
+}
+
+th:nth-child(13),
+td:nth-child(13) {
+    width: 200px;
+}
+
+.uploaded-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 5px;
+    display: block;
+    margin-top: 10px;
+}
+
+.pdf-link {
+    display: block;
+    margin-top: 5px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
