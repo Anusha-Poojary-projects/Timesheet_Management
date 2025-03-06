@@ -1,23 +1,57 @@
-import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box, Paper } from "@mui/material";
 
 
-const EmployeeLogin = () => {
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  MenuItem,
+} from "@mui/material";
+
+const EmployeeLogin = ({ onLogin }) => {
+  const [timesheetData, setTimesheetData] = useState([]);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const fetchTimesheetData = async () => {
+      try {
+        const response = await axios.get("https://rms-m7sb.onrender.com/employee/");
+        setTimesheetData(response.data);
+      } catch (error) {
+        console.error("Error fetching timesheet data:", error);
+        setError("Failed to load employee data. Please try again later.");
+      }
+    };
+    fetchTimesheetData();
+  }, []);
+
+  const roles = [...new Set(timesheetData.map((emp) => emp.job_role))];
+
   const handleLogin = () => {
-    if (!email || !password) {
-      setError("Please enter both email and password");
+    if (!email || !role) {
+      setError("Please enter email and select a role");
       return;
     }
-    setError("");
-    console.log("Logging in with", { email, password });
+
+    const user = timesheetData.find(
+      (emp) => emp.email === email && emp.job_role === role
+    );
+
+    if (user) {
+      onLogin(user);
+    } else {
+      setError("Invalid email or role.");
+    }
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+    <Container component="main" maxWidth="xs" sx={{ mt: 10 ,borderRadius:"10px"}}>
       <Paper elevation={3} sx={{ p: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Typography variant="h5" gutterBottom>
           Login
@@ -32,20 +66,33 @@ const EmployeeLogin = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
-            label="Password"
-            type="password"
+            select
+            label="Role"
             variant="outlined"
             fullWidth
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error && <Typography color="error" variant="body2">{error}</Typography>}
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            {roles.length > 0 ? (
+              roles.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem disabled>No roles available</MenuItem>
+            )}
+          </TextField>
+          {error && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {error}
+            </Typography>
+          )}
           <Button
             variant="contained"
-            
             fullWidth
-            sx={{ mt: 2, backgroundColor: "#A7C7E8" }}
+            sx={{ mt: 2, backgroundColor: "#2F4F4F" }}
             onClick={handleLogin}
           >
             Login
@@ -57,3 +104,5 @@ const EmployeeLogin = () => {
 };
 
 export default EmployeeLogin;
+
+
