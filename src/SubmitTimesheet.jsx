@@ -29,7 +29,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import * as XLSX from "xlsx";
 
-const TimesheetCalendar = () => {
+const TimesheetCalendar = ({ user }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [days, setDays] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -37,6 +37,7 @@ const TimesheetCalendar = () => {
   const [timeValue, setTimeValue] = useState("08:00");
   const [selectedTimes, setSelectedTimes] = useState({});
   const [selectionMode, setSelectionMode] = useState("single");
+
 
   useEffect(() => {
     const start = startOfMonth(currentMonth);
@@ -181,6 +182,35 @@ const TimesheetCalendar = () => {
     handleCloseDialog();
   };
 
+  const calculateTotalWorkedHoursByMonth = () => {
+  const storedData = JSON.parse(localStorage.getItem("attendanceData")) || {};
+  const monthlyTotals = {};
+
+  Object.entries(storedData).forEach(([date, time]) => {
+    if (time) {
+      const [hours, minutes] = time.split(":").map(Number);
+      const totalMinutes = hours * 60 + (minutes || 0);
+      const monthKey = date.substring(0, 7);
+
+      if (!monthlyTotals[monthKey]) {
+        monthlyTotals[monthKey] = 0;
+      }
+
+      monthlyTotals[monthKey] += totalMinutes;
+    }
+  });
+
+  Object.keys(monthlyTotals).forEach((month) => {
+    monthlyTotals[month] = (monthlyTotals[month] / 60).toFixed(2);
+  });
+
+  return monthlyTotals; 
+};
+
+
+const workedHoursByMonth = calculateTotalWorkedHoursByMonth();
+console.log(workedHoursByMonth);
+
   const calculateTotalWorkedHours = () => {
     const storedData = JSON.parse(localStorage.getItem("attendanceData")) || {};
 
@@ -189,7 +219,7 @@ const TimesheetCalendar = () => {
     Object.values(storedData).forEach((time) => {
       if (time) {
         const [hours, minutes] = time.split(":").map(Number);
-        totalMinutes += hours * 60 + (minutes || 0); // Convert to minutes
+        totalMinutes += hours * 60 + (minutes || 0);
       }
     });
 
@@ -197,7 +227,7 @@ const TimesheetCalendar = () => {
     return totalHours;
   };
 
-  console.log("Total Hours Worked:", calculateTotalWorkedHours());
+
 
   const handleExportToExcel = () => {
     const data = days.filter(Boolean).map((date) => {
@@ -234,17 +264,22 @@ const TimesheetCalendar = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Timesheet");
     XLSX.writeFile(wb, "TimesheetData.xlsx");
   };
+  const allDatesMarked = days
+    .filter((day) => day && !isWeekend(day))
+    .every((day) => selectedTimes[format(day, "yyyy-MM-dd")]);
 
   return (
+
+
     <Container
       sx={{
-        padding: 3,
+        padding: 2,
         backgroundColor: "white",
-        borderRadius: 4,
-        boxShadow: "8px 8px 20px rgba(0, 0, 0, 0.15)",
+        borderRadius: 3,
+        boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.1)",
         maxWidth: "800px",
         margin: "auto",
-        mt: 4,
+        mt: 3,
       }}
     >
       <Box
@@ -362,6 +397,7 @@ const TimesheetCalendar = () => {
           );
         })}
       </Grid>
+
       {selectionMode === "range" && selectedDates.length > 0 && (
         <Box mt={2} textAlign="center">
           <Button variant="contained" onClick={handleOpenDialog}>
@@ -369,6 +405,45 @@ const TimesheetCalendar = () => {
           </Button>
         </Box>
       )}
+      {allDatesMarked && (
+  <Button
+    variant="contained"
+    color="primary"
+    sx={{ mt: 2 }}
+    onClick={() => {
+      const firstDate = Object.keys(selectedTimes)[0];
+      if (!firstDate) {
+        console.warn("No dates selected.");
+        return;
+      }
+
+      const submittedMonth = format(new Date(firstDate), "yyyy-MM");
+      const submittedData = Object.entries(selectedTimes).reduce(
+        (acc, [date, time]) => {
+          if (date.startsWith(submittedMonth)) {
+            acc[date] = time;
+          }
+          return acc;
+        },
+        {}
+      );
+
+      const finalSubmission = {
+        employeeName: user?.name || "N/A",
+        employeeEmail: user?.email || "N/A",
+        employeeId: user?.id || "N/A",
+        month: submittedMonth,
+        timesheet: submittedData
+      };
+
+      console.log("Submitted Timesheet Data:", finalSubmission);
+    }}
+  >
+    Submit
+  </Button>
+)}
+
+
       <Dialog
         open={openPopup}
         onClose={handleCloseDialog}
@@ -423,6 +498,7 @@ const TimesheetCalendar = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Typography variant="subtitle1" fontWeight="bold">
         Total Monthly Hours Worked: {calculateTotalWorkedHours()} hrs
       </Typography>
