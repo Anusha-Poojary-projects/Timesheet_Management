@@ -33,12 +33,13 @@ const Navigationbar = ({ user, setUser }) => {
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: "#2F4F4F" }}>
+      <AppBar position="static" sx={{ backgroundColor: "#2F4F4F" ,mt:-1, ml:-1, pr:2, height:"55px" }}>
         <Toolbar
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            minHeight: "48px",
+            minHeight: "35px",
+            height:"32px"
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -47,7 +48,7 @@ const Navigationbar = ({ user, setUser }) => {
               onClick={toggleDrawer}
               sx={{ color: "white" }}
             >
-              <MenuIcon fontSize="large" />
+              <MenuIcon fontSize="medium" />
             </IconButton>
           </Box>
 
@@ -59,27 +60,27 @@ const Navigationbar = ({ user, setUser }) => {
               gap: 2,
             }}
           >
-            {user?.job_role !== "HR" && (
+            {/* {user?.job_role !== "HR" && (
               <Button
                 component={Link}
                 to="/home"
                 sx={{
                   color: location.pathname === "/home" ? "#FFD700" : "white",
                   textTransform: "none",
-                  fontSize: "16px",
+                  fontSize: "15px",
                 }}
               >
                 Home
               </Button>
-            )}
+            )} */}
 
             <Button
               component={Link}
-              to="/"
+              to="/Submit"
               sx={{
-                color: location.pathname === "/" ? "#FFD700" : "white",
+                color: location.pathname === "/Submit" ? "#FFD700" : "white",
                 textTransform: "none",
-                fontSize: "16px",
+                fontSize: "15px",
               }}
             >
               Submit Time
@@ -93,7 +94,7 @@ const Navigationbar = ({ user, setUser }) => {
                   color:
                     location.pathname === "/timesheet" ? "#FFD700" : "white",
                   textTransform: "none",
-                  fontSize: "16px",
+                  fontSize: "15px",
                 }}
               >
                 Timesheet
@@ -114,7 +115,7 @@ const Navigationbar = ({ user, setUser }) => {
             </Button>
 
             {user?.name && (
-              <Avatar sx={{ bgcolor: "#FFD700", color: "#2F4F4F" }}>
+              <Avatar sx={{ bgcolor: "#FFD700", color: "#2F4F4F", height:"30px",mt:-1 }}>
                 {user.name.charAt(0).toUpperCase()}
               </Avatar>
             )}
@@ -133,7 +134,7 @@ const Navigationbar = ({ user, setUser }) => {
             </ListItemButton>
             <Divider />
 
-            {user?.job_role !== "HR" && (
+            {/* {user?.job_role !== "HR" && (
               <ListItemButton
                 component={Link}
                 to="/home"
@@ -142,9 +143,9 @@ const Navigationbar = ({ user, setUser }) => {
                 <HomeIcon sx={{ mr: 2 }} />
                 <ListItemText primary="Home" />
               </ListItemButton>
-            )}
+            )} */}
 
-            <ListItemButton component={Link} to="/" onClick={toggleDrawer}>
+            <ListItemButton component={Link} to="/Submit" onClick={toggleDrawer}>
               <ScheduleIcon sx={{ mr: 2 }} />
               <ListItemText primary="Submit Time" />
             </ListItemButton>
