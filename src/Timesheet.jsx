@@ -69,14 +69,15 @@ const Timesheet = () => {
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
   return (
-    <Container sx={{ padding: 5 }}>
-      <Box display="flex" gap={3} mb={3}>
+    <Container sx={{ padding: 3, mr:-4,ml:-4}}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} mt={4}> 
         <TextField
           label="Search by name, email, or client"
           variant="outlined"
           fullWidth
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{mr:1, ml:-7, pt:-1}}
         />
         <FormControl fullWidth>
           <Select
@@ -93,12 +94,12 @@ const Timesheet = () => {
         variant="contained" 
         color="primary" 
         onClick={exportToCSV} 
-        sx={{backgroundColor:"#A7C7E7", 
-        color:"black", fontWeight:"500", paddingRight:"50px", paddingLeft:"50px"}}>
+        sx={{backgroundColor:"#2F4F4F", 
+        color:"white", fontWeight:"500", paddingRight:"70px", paddingLeft:"70px" , paddingTop:"10px",paddingBottom:"10px", ml:3, mr:-9}}>
         Export
       </Button>
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{width:"1300px", ml:-8}}>
         <Table>
           <TableHead>
             <TableRow>
@@ -107,7 +108,8 @@ const Timesheet = () => {
               ].map((header) => (
                 <TableCell 
                 key={header} 
-                sx={{ minWidth: 150, padding: "8px", backgroundColor: "#A7C7E7", whiteSpace: "nowrap" }}>{header}
+                sx={{ minWidth: 150, padding: "10px", backgroundColor: "#2F4F4F",color:"white", whiteSpace: "nowrap" }}
+                >{header}
                 </TableCell>
               ))}
             </TableRow>

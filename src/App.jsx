@@ -6,6 +6,7 @@ import Timesheet from "./Timesheet";
 import EmployeeTimesheet from "./SubmitTimesheet";
 import { Container, Typography } from "@mui/material";
 import EmployeeLogin from "./Log";
+// import ApplyLeaveForm from "./Leave"
 
 function App() {
   const [user, setUser] = useState(null); 
@@ -17,8 +18,8 @@ function App() {
           <Navigationbar user={user} setUser={setUser}/>
           <Container>
             <Routes>
-              <Route path="/home" element={<Typography variant="h3">Home</Typography>} />
-              {user.job_role != "HR" && <Route path="/" element={<EmployeeTimesheet user={user}/>} />}
+              {/* <Route path="/home" element={<Typography variant="h3">Home</Typography>} /> */}
+              {user.job_role != "HR" && <Route path="/Submit" element={<EmployeeTimesheet user={user}/>} />}
               {user.job_role === "HR" && <Route path="/timesheet" element={<Timesheet />} />}
             </Routes>
           </Container>
